@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<html>
+    <title>jSGride</title>
+    <head>
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+        <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+
+    </head>
+    <body>
+        <div id="jsGrid"></div>
+        
+        <script>
+
+                    
+                            
+            
+                    $("#jsGrid").jsGrid({
+                        height: "auto",
+                        width: "100%",
+                        filtering: true,
+                        inserting: true,
+                        editing: true,
+                        sorting: true,
+                        paging: true,
+                        autoload: true,
+                        editButton: true,                               // show edit button
+                        deleteButton: true,                             // show delete button
+
+                        pageSize: 10,
+                        pageButtonCount: 5,
+                        confirmDeleting: true,
+
+                        deleteConfirm: "Do you really want to delete client?",
+
+                        controller: {
+                            loadData: function(filter) {
+                                return $.ajax({
+                                    type: "GET",
+                                    url: "/Home/Employee",
+                                    data: filter,
+                                    dataType: "json"
+                                });
+                            },
+
+                            insertItem: function(item) {
+                                return $.ajax({
+                                    type: "POST",
+                                    url: "/Home/AddEmployee",
+                                    data: item,
+                                    dataType: "json"
+                                });
+                            },
+
+                            updateItem: function(item) {
+                                return $.ajax({
+                                    type: "PUT",
+                                    url: "/Home/EditEmployee/" + item.Id,
+                                    data: item,
+                                    dataType: "json"
+                                });
+                            },
+
+                            deleteItem: function(item) {
+                                return $.ajax({
+                                    type: "Post",
+                                    url: "/Home/Delete/" + item.Id,
+                                    data: item,
+                                    dataType: "json"
+                                });
+                            }
+                        },
+                        fields: [
+                        { name: "name", type: "text", width: 100, validate: "required" },
+                        { name: "email", type: "text", width: 200 , validate: "required"},
+                        { name: "phone", type: "number", width: 100 , validate: "required"},
+                        { name: "age", type: "number",width: 100 , validate: "required" },
+                        { name: "gender", type: "text",width: 100 , validate: "required"},
+                        { name: "country", type: "text", width: 100, validate: "required" },
+                        { name: "state", type: "text", width: 100, validate: "required" },
+                        { name: "city", type: "text", width: 100, validate: "required" },
+                        { name: "postalCode", type: "text", width: 100, validate: "required" },
+                        { type:"control" }
+
+                        ]
+                    });
+
+                
+            
+        </script>
+
+    </body>
+</html>
